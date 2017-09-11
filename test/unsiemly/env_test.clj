@@ -1,0 +1,35 @@
+(ns unsiemly.env-test
+  (:require [unsiemly.env :as env]
+            [unsiemly.elasticsearch :as es]
+            [clojure.test :as t]
+            [clojure.spec.alpha :as s]))
+
+;; Side-effecting require: this loads ES and StackDriver namespaces, which in
+;; turn defines some specs that this needs.
+(require 'unsiemly.core)
+
+(alias 'u 'unsiemly)
+
+(t/deftest opts-from-env-elasticsearch-test
+  (with-redefs [environ.core/env {:siem-type "elasticsearch"
+                                  :log-name "my-log"
+                                  :elasticsearch-hosts "127.0.0.1:1234,127.0.0.1:5678"}]
+    (let [expected {::u/siem-type :elasticsearch
+                    ::u/log-name "my-log"
+                    ::es/hosts ["127.0.0.1:1234" "127.0.0.1:5678"]}
+          opts (env/opts-from-env!)]
+      (t/is (nil? (s/explain-data ::u/opts expected)))
+      (t/is (nil? (s/explain-data ::u/opts opts)))
+      (t/is (= expected opts)))))
+
+(t/deftest opts-from-env-aws-elasticsearch-test
+  (with-redefs [environ.core/env {:siem-type "aws-elasticsearch"
+                                  :log-name "my-log"
+                                  :elasticsearch-hosts "127.0.0.1:1234,127.0.0.1:5678"}]
+    (let [expected {::u/siem-type :aws-elasticsearch
+                    ::u/log-name "my-log"
+                    ::es/hosts ["127.0.0.1:1234" "127.0.0.1:5678"]}
+          opts (env/opts-from-env!)]
+      (t/is (nil? (s/explain-data ::u/opts expected)))
+      (t/is (nil? (s/explain-data ::u/opts opts)))
+      (t/is (= expected opts)))))

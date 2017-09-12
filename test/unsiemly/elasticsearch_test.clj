@@ -5,12 +5,6 @@
 
 (alias 'u 'unsiemly)
 
-(defn access
-  [obj n]
-  (let [m (.. obj getClass (getDeclaredField n))]
-    (.setAccessible m true)
-    (.get m obj)))
-
 (t/deftest index-name-tests
   (t/is (re-matches
          #"my-index-\d{4}-\d{2}-\d{2}"

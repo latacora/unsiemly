@@ -1,9 +1,11 @@
 # unsiemly
 
 > unseemly |ˌənˈsēmlē|, adj.
+>
 > (of behavior or actions) not proper or appropriate: an unseemly squabble.
 
 > unsiemly |ˌənˈsēmlē|, noun
+>
 > a library for sending structured data to SIEMs
 
 ## Installation
@@ -20,7 +22,7 @@ This project shares a number of things with unclogged:
 
 * Their original purpose was to forward data to SIEMs
 * The API is very similar
-* They share one of their authors
+* They share an author
 
 However, they are different projects with different goals. This project is an
 abstraction over SIEMs, consuming mostly-structured data and giving you tools
@@ -33,10 +35,11 @@ That process can't be configured, and if you're unlucky you'll just see a
 structure, which might be fine, but also might be totally different from what
 your SIEM expects for further processing, alerting, et cetera.
 
-
 It would make sense for unsiemly to use unclogged to send information to a
 syslog-speaking SIEM (see issue #2). Neither project replaces the other: they're
 cousins operating on a different abstraction layer.
+
+[unclogged]: https://github.com/RackSec/unclogged
 
 ## License
 

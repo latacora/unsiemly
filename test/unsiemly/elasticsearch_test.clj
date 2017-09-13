@@ -59,9 +59,10 @@
          (t/is (= "hi" log-name))
          "hi-2000-01-01")]
       (let [cb (internal/entries-callback
-                {::u/siem-type :aws-elasticsearch
+                {::u/siem-type :elasticsearch
                  ::u/log-name "hi"
                  ::es/hosts ["127.0.0.1"]
+                 ::es/aws-request-signing true
                  ::es/aws-region "us-west-1"})
             {::es/keys [sniffer client]} (meta cb)]
         (t/is (= [[::client {:hosts ["127.0.0.1"]

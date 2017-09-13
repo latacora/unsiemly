@@ -13,15 +13,13 @@
 
 (s/def ::hosts (s/coll-of string?))
 (s/def ::aws-region string?)
+(s/def ::aws-request-signing boolean?)
 
-(s/def ::opts
-  (s/and ::u/base-opts (s/keys :req [::hosts])))
-
-(s/def ::aws-opts
-  (s/and ::opts (s/keys :opt [::aws-region])))
-
-(defmethod internal/opts-spec :elasticsearch [_] ::opts)
-(defmethod internal/opts-spec :aws-elasticsearch [_] ::aws-opts)
+(defmethod internal/opts-spec :elasticsearch [_]
+  (s/and
+   ::u/base-opts
+   (s/keys :req [::hosts]
+           :opt [::aws-request-signing ::aws-region])))
 
 (def ^:private ^Supplier clock-supplier
   "A supplier that returns the current UTC date. Only used for AWS request
@@ -45,19 +43,19 @@
    (java.text.SimpleDateFormat. (str "'" log-name "-'yyyy-MM-dd"))
    (java.util.Date.)))
 
-(defn ^:private entries-callback
-  [opts]
+(defmethod internal/entries-callback :elasticsearch
+  [{::u/keys [log-name] ::keys [hosts aws-request-signing aws-region] :as opts}]
   (let [client (spandex/client
                 (merge
-                 {:hosts (opts ::hosts)}
-                 (when (= (opts ::u/siem-type) :aws-elasticsearch)
+                 {:hosts hosts}
+                 (when aws-request-signing
                    {:http-client
                     {::aws-signing-request-interceptor
                      {:service "es"
-                      :region (opts ::aws-region "us-east-1")}}})))
+                      :region aws-region}}})))
         sniffer (spandex/sniffer client)
         callback (fn [entries]
-                   (let [index-name (index-name! (::u/log-name opts))]
+                   (let [index-name (index-name! log-name)]
                      (doseq [entry entries]
                        (spandex/request
                         client
@@ -66,11 +64,3 @@
                          :body entry}))))
         meta {::u/opts opts ::client client ::sniffer sniffer}]
     (with-meta callback meta)))
-
-(defmethod internal/entries-callback :elasticsearch
-  [opts]
-  (entries-callback opts))
-
-(defmethod internal/entries-callback :aws-elasticsearch
-  [opts]
-  (entries-callback opts))

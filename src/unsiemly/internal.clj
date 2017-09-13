@@ -11,7 +11,7 @@
 (create-ns 'unsiemly)
 (alias 'u 'unsiemly)
 
-(s/def ::u/siem-type #{:stdout :elasticsearch :aws-elasticsearch :stackdriver})
+(s/def ::u/siem-type #{:stdout :elasticsearch :stackdriver})
 (s/def ::u/log-name string?)
 
 (def base-req-keys [::u/siem-type ::u/log-name])

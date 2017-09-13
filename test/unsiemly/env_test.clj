@@ -23,12 +23,16 @@
       (t/is (= expected opts)))))
 
 (t/deftest opts-from-env-aws-elasticsearch-test
-  (with-redefs [environ.core/env {:siem-type "aws-elasticsearch"
+  (with-redefs [environ.core/env {:siem-type "elasticsearch"
                                   :log-name "my-log"
-                                  :elasticsearch-hosts "127.0.0.1:1234,127.0.0.1:5678"}]
-    (let [expected {::u/siem-type :aws-elasticsearch
+                                  :elasticsearch-hosts "127.0.0.1:1234,127.0.0.1:5678"
+                                  :elasticsearch-aws-request-signing "true"
+                                  :elasticsearch-aws-region "us-west-1"}]
+    (let [expected {::u/siem-type :elasticsearch
                     ::u/log-name "my-log"
-                    ::es/hosts ["127.0.0.1:1234" "127.0.0.1:5678"]}
+                    ::es/hosts ["127.0.0.1:1234" "127.0.0.1:5678"]
+                    ::es/aws-request-signing true
+                    ::es/aws-region "us-west-1"}
           opts (env/opts-from-env!)]
       (t/is (nil? (s/explain-data ::u/opts expected)))
       (t/is (nil? (s/explain-data ::u/opts opts)))

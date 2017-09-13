@@ -1,7 +1,10 @@
 (ns unsiemly.stackdriver-test
   (:require [unsiemly.stackdriver :as sd]
             [clojure.test :as t]
-            [unsiemly.internal :as internal])
+            [unsiemly.internal :as internal]
+            [clojure.spec.alpha :as s]
+            [clojure.spec.gen.alpha :as sgen]
+            [clojure.spec.test.alpha :as stest])
   (:import [com.google.cloud.logging
             LogEntry Payload$JsonPayload
             Logging Logging$WriteOption
@@ -38,7 +41,9 @@
     (t/is (= log-name v))))
 
 (t/deftest entries-callback-test
-  (let [writes (atom [])]
+  (let [writes (atom [])
+        first-evs [{"event" {"nested" {"deeply" 1.0}}} {"event" 2.0}]
+        second-evs [{"event" 3.0} {"event" 4.0}]]
     (with-redefs [unsiemly.stackdriver/build-client!
                   (fn [opts]
                     (proxy [Logging] []
@@ -50,8 +55,8 @@
                 {::u/siem-type :stackdriver
                  ::u/log-name "mylogname"
                  ::sd/project-id "myproject"})]
-        (cb [{"event" {"nested" {"deeply" 1}}} {"event" 2}])
-        (cb [{"event" 3} {"event" 4}]))
+        (cb first-evs)
+        (cb second-evs))
 
       (let [[[first-msgs first-opts] [second-msgs second-opts]] @writes
             [first-log-name-opt first-resource-opt] first-opts
@@ -62,4 +67,47 @@
         (is-global-resource-opt? first-resource-opt)
         (is-global-resource-opt? second-resource-opt)
 
-        (t/is (= [] (map #(.getDataAsMap (.getPayload %)) first-msgs)))))))
+        (t/is (= first-evs (map #(.getDataAsMap (.getPayload %)) first-msgs)))
+        (t/is (= second-evs (map #(.getDataAsMap (.getPayload %)) second-msgs)))))))
+
+;; The following tests are going to be confusing unless you go read:
+;; - https://github.com/latacora/unsiemly/issues/11
+;; - https://github.com/GoogleCloudPlatform/google-cloud-java/issues/2432
+
+(defn roundtrip
+  "Do a GCP StackDriver serialization roundtrip to see how data comes out."
+  [x]
+  (.getDataAsMap (Payload$JsonPayload/of x)))
+
+(create-ns 'unsiemly.stackdriver-test.roundtrippable)
+(alias 'rt 'unsiemly.stackdriver-test.roundtrippable)
+
+(s/def ::rt/map (s/map-of string? ::rt/value :gen-max 5))
+(s/def ::rt/vec (s/coll-of ::rt/value :gen-max 5))
+(s/def ::rt/atom boolean?)
+(s/def ::rt/value (s/or :map ::rt/map :vec ::rt/vec :atom ::rt/atom))
+
+(s/fdef fixed-roundtrip :args (s/cat :x ::rt/map) :re ::rt/map)
+;; toplevel is a map not a value: has to be a JSON object aka map.
+
+(defn fixed-roundtrip
+  "Like [[roundtrip]], but first wraps this thing in noniterable-map, so more
+  things should roundtrip."
+  [x]
+  (roundtrip (#'sd/noniterable-maps x)))
+
+(t/deftest noniterable-maps-test
+  (t/testing "regression test (if this fails GCP fixed a bug; go delete the workaround)"
+    (t/is (= {"a" [["b" [["c" 1.0] ["d" 2.0]]]]}
+             (roundtrip {"a" {"b" {"c" 1 "d" 2}}}))))
+
+  (t/testing "nested map with noniterable-maps workaround"
+    (let [m {"a" {"b" {"c" 1.0}}}]
+      (t/is (= m (fixed-roundtrip m)))))
+
+  (t/testing "nested map with vecs with noniterable-maps workaround"
+    (let [m {"a" {"b" [{"c" 1.0} {"d" 2.0}]}}]
+      (t/is (= m (fixed-roundtrip m))))))
+
+(t/deftest ^:generative generative-test
+  (t/is (every? (comp nil? :failure) (stest/check `fixed-roundtrip))))

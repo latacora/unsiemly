@@ -45,7 +45,7 @@
         first-evs [{"event" {"nested" {"deeply" 1.0}}} {"event" 2.0}]
         second-evs [{"event" 3.0} {"event" 4.0}]]
     (with-redefs [unsiemly.stackdriver/build-client!
-                  (fn [opts]
+                  (fn []
                     (proxy [Logging] []
                       (write [msgs opts]
                         (swap! writes conj [msgs opts]))))]

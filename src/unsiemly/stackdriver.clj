@@ -57,19 +57,9 @@
    ->JustAMap x))
 
 (defn ^:private build-client!
-  "Creates a StackDriver client.
-
-  Note that building a client requires a project ID to be defined somehow. This
-  may be set via opts, though the SDK will attempt to access it in the
-  environment. If it's not set in the environment and not set in the opts, this
-  may raise an exception."
-  [{::keys [project-id]}]
-  (let [logging-opts (if (some? project-id)
-                       (-> (LoggingOptions/newBuilder)
-                           (.setProjectId project-id)
-                           (.build))
-                       (LoggingOptions/getDefaultInstance))]
-    (.getService ^LoggingOptions logging-opts)))
+  "Creates a StackDriver client."
+  []
+  (.getService (LoggingOptions/getDefaultInstance)))
 
 (def ^:private global-resource
   (-> (MonitoredResource/newBuilder "global") (.build)))
@@ -81,7 +71,7 @@
 
 (defmethod internal/entries-callback :stackdriver
   [opts]
-  (let [client (build-client! opts)
+  (let [client (build-client!)
         default-write-opts (into-array [(Logging$WriteOption/logName (::u/log-name opts))
                                         (Logging$WriteOption/resource global-resource)])]
     (fn [entries]

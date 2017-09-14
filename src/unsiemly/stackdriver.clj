@@ -51,9 +51,7 @@
      (sr/continue-then-stay sr/MAP-VALS p)
 
      vector?
-     [sr/ALL p]
-
-     sr/STOP sr/STOP))
+     [sr/ALL p]))
    ->JustAMap x))
 
 (defn ^:private build-client!

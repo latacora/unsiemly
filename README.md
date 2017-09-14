@@ -108,7 +108,7 @@ utilities for less obvious transforms.
 ## Configuration via the environment
 
 ```clojure
-(require '[unsiemly.env :refer [opts-from-env!]]')
+(require '[unsiemly.env :refer [opts-from-env!]])
 (def siem (u/siem-sink! (opts-from-env!)))
 ```
 

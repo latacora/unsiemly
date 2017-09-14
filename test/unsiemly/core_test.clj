@@ -11,3 +11,7 @@
     (t/is (= "{:my event}\n{:my second event}\n"
              (with-out-str
                @(ms/put-all! s [{:my "event"} {:my "second event"}]))))))
+
+(t/deftest validate-spec-test
+  (t/is (thrown? AssertionError (c/siem-sink! {})))
+  (t/is (thrown? AssertionError (c/siem-sink! {::u/siem-type :invalid}))))

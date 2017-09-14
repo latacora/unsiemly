@@ -19,7 +19,7 @@
 (s/def ::u/base-opts (eval `(s/keys :req ~base-req-keys)))
 
 (defmulti opts-spec ::u/siem-type)
-(defmethod opts-spec ::u/stdout [_] ::u/base-opts)
+(defmethod opts-spec :stdout [_] ::u/base-opts)
 
 (s/def ::u/opts (s/multi-spec opts-spec ::u/siem-type))
 

@@ -6,7 +6,8 @@
   Typically, you'll compose some of these functions and then use something like
   specter or update/update-in to apply them to maps."
   (:require [clj-time.coerce :as tc]
-            [clj-time.format :as tf]))
+            [clj-time.format :as tf]
+            [com.rpl.specter :as sr]))
 
 (defn epoch-millis->
   "Parse a number of milliseconds (as a string or numeric type) to a Joda
@@ -27,3 +28,24 @@
   recognize these as date fields with no configuration."
   [timestamp]
   (tf/unparse (tf/formatters :date-time) timestamp))
+
+(def TREE-LEAVES
+  "A specter selector for all of the leaves in a nested tree."
+  (sr/recursive-path
+   [] p
+   (sr/cond-path
+    vector? [sr/ALL p]
+    map? [sr/MAP-VALS p]
+    sr/STAY sr/STAY)))
+
+(def NESTED
+  "A specter selector for junctions in nested data structures."
+  (sr/recursive-path
+   [] p
+   (sr/cond-path
+    vector? (sr/stay-then-continue sr/ALL p)
+    map? (sr/stay-then-continue sr/MAP-VALS p))))
+
+(def TREE-KEYS
+  "A specter selector for all of the map keys in a nested tree."
+  (sr/comp-paths NESTED map? sr/MAP-KEYS))

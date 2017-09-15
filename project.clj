@@ -7,7 +7,7 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha18"]
                  [manifold "0.1.7-alpha5"]
                  [environ "1.1.0"]
-                 [clj-time "0.14.0"]
+                 [clojure.java-time "0.3.0"]
                  [camel-snake-kebab "0.4.0"]
 
                  ;; xforms

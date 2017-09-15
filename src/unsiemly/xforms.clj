@@ -5,15 +5,14 @@
 
   Typically, you'll compose some of these functions and then use something like
   specter or update/update-in to apply them to maps."
-  (:require [clj-time.coerce :as tc]
-            [clj-time.format :as tf]
-            [com.rpl.specter :as sr]))
+  (:require [java-time :as jt]
+            [com.rpl.specter :as sr])
+  (:import [java.time Instant]))
 
-(defn epoch-millis->
-  "Parse a number of milliseconds (as a string or numeric type) to a Joda
-  timesatmp."
+(defn ^Instant epoch-millis->
+  "Parse a number of milliseconds (as a string or numeric type) to an instant."
   [millis]
-  (tc/from-long
+  (jt/instant
    (if (string? millis)
      ;; parsing as double because it allows for both "integer" literals as well
      ;; as literals with a decimal point in them, and they still have plenty of
@@ -21,13 +20,13 @@
      (.longValue (Double/parseDouble millis))
      millis)))
 
-(defn ->iso8601-str
+(defn ^String ->iso8601
   "Given a timestamp, parse it to an ISO8601 timestamp.
 
   This is for many reasons, but one important one is that ElasticSearch will
   recognize these as date fields with no configuration."
-  [timestamp]
-  (tf/unparse (tf/formatters :date-time) timestamp))
+  [^Instant instant]
+  (jt/format :iso-instant instant))
 
 (def TREE-LEAVES
   "A specter selector for all of the leaves in a nested tree."

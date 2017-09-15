@@ -60,3 +60,11 @@
       org.joda.time.DateTime
       (inst-ms* [inst] (inst-ms* (jt/instant inst)))))
   (catch ClassNotFoundException cnfe))
+
+(defn insts->iso8601
+  "Given a nested data structure, find all the leaves that are also time instants,
+  and convert them to iso8601. This will not attempt to be clever and parse e.g.
+  strings to see if they're probably a timestamp (say, ISO8601 or RFC822) --
+  it's the caller's job to find and parse those first."
+  [m]
+  (sr/transform [TREE-LEAVES inst?] (comp ->iso8601 jt/instant) m))

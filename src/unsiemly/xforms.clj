@@ -48,3 +48,15 @@
 (def TREE-KEYS
   "A specter selector for all of the map keys in a nested tree."
   (sr/comp-paths NESTED map? sr/MAP-KEYS))
+
+;; Implement Inst for Joda Time, if it's available.
+(try
+  (Class/forName "org.joda.time.Instant")
+  (eval
+   '(extend-protocol Inst
+      org.joda.time.Instant
+      (inst-ms* [inst] (inst-ms* (jt/instant inst)))
+
+      org.joda.time.DateTime
+      (inst-ms* [inst] (inst-ms* (jt/instant inst)))))
+  (catch ClassNotFoundException cnfe))

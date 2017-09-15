@@ -33,4 +33,6 @@
                    :generative :generative}
 
   :profiles {:uberjar {:aot :all}
-             :dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}})
+             :dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]
+                                  ;; ;; just for joda-time conversions:
+                                  [clj-time "0.14.0"]]}})

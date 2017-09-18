@@ -1,5 +1,8 @@
 # unsiemly
 
+[![Build Status](https://travis-ci.org/latacora/unsiemly.svg?branch=master)](https://travis-ci.org/latacora/unsiemly)
+[![Clojars Project](https://img.shields.io/clojars/v/com.latacora/unsiemly.svg)](https://clojars.org/com.latacora/unsiemly)
+
 > unseemly |ˌənˈsēmlē|, adj.
 >
 > (of behavior or actions) not proper or appropriate: an unseemly squabble.
@@ -20,6 +23,8 @@ StackDriver][gcpsd]. Because we use `java.time`/JSR310, this project requires
 JDK 8.
 
 ## Usage
+
+Start by adding unsiemly to your dependencies; see above for a Clojars badge.
 
 The primary abstraction is a [manifold][manifold] stream. This makes it easy to
 test your code by giving you a clean separation between your logic and the

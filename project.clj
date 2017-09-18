@@ -4,25 +4,25 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.9.0-alpha18"]
+  :dependencies [[org.clojure/clojure "1.9.0-beta1"]
                  [manifold "0.1.7-alpha5"]
                  [environ "1.1.0"]
-                 [clojure.java-time "0.3.0"]
+                 [clojure.java-time "0.3.1"]
                  [camel-snake-kebab "0.4.0"]
 
                  ;; xforms
                  [com.rpl/specter "1.0.3"]
 
                  ;; -> ElasticSearch
-                 [cc.qbits/spandex "0.5.1"]
+                 [cc.qbits/spandex "0.5.2"]
 
                  ;; -> AWS ES
                  [vc.inreach.aws/aws-signing-request-interceptor "0.0.16"]
-                 [com.amazonaws/aws-java-sdk-core "1.11.138"
+                 [com.amazonaws/aws-java-sdk-core "1.11.197"
                   :exclusions [commons-logging]]
 
                  ;; -> StackDriver
-                 [com.google.cloud/google-cloud-logging "1.2.1"]]
+                 [com.google.cloud/google-cloud-logging "1.5.1"]]
 
   :main ^:skip-aot unsiemly.core
   :target-path "target/%s"

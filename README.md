@@ -105,10 +105,14 @@ Usually, the data you have won't be in a format that your SIEM can consume.
 
 By default, common data types that can't be appropriately serialized are already
 handled. For example, SIEMs that consume JSON will have keywords transformed to
-strings, timestamps are converted to ISO8601, et cetera.
+strings, timestamps are converted to ISO8601, et cetera. As a rule, you can just
+give unsiemly the data structure you already have and it will probably do
+something sane with it.
 
 If you have additional parsing needs, check out `unsiemly.xforms`, which has
-utilities for less obvious transforms.
+utilities for less obvious transforms. This can be useful if you need a very
+specific timestamp format, for example. Strings will never be processed further;
+so converting to the string type you want will always work.
 
 ## Configuration via the environment
 

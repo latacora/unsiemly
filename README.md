@@ -17,7 +17,7 @@ It's intended for use by security operations teams, but since most modern SIEMs
 just look an awful lot like stream processors tools, you can probably use it
 for a bunch of other stuff.
 
-Currently supports [ElasticSearch][es] (with support for AWS' hosted
+Currently supports [ElasticSearch][es] (with optional support for AWS' hosted
 Elasticsearch and its proprietary message signing) and [GCP's
 StackDriver][gcpsd]. Because we use `java.time`/JSR310, this project requires
 JDK 8.

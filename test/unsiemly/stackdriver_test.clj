@@ -42,8 +42,11 @@
 
 (t/deftest entries-callback-test
   (let [writes (atom [])
-        first-evs [{"event" {"nested" {"deeply" 1.0}}} {"event" 2.0}]
-        second-evs [{"event" 3.0} {"event" 4.0}]]
+        first-evs [{"event" {:nested {:deeply 1.0}}} {"event" ::kw-val}]
+        first-jsond-evs [{"event" {"nested" {"deeply" 1.0}}} {"event" "kw-val"}]
+
+        second-evs [{:event 3.0} {"event" 4.0}]
+        second-jsond-evs [{"event" 3.0} {"event" 4.0}]]
     (with-redefs [unsiemly.stackdriver/build-client!
                   (fn []
                     (proxy [Logging] []
@@ -67,8 +70,10 @@
         (is-global-resource-opt? first-resource-opt)
         (is-global-resource-opt? second-resource-opt)
 
-        (t/is (= first-evs (map #(.getDataAsMap (.getPayload %)) first-msgs)))
-        (t/is (= second-evs (map #(.getDataAsMap (.getPayload %)) second-msgs)))))))
+        (t/is (= first-jsond-evs
+                 (map #(.getDataAsMap (.getPayload %)) first-msgs)))
+        (t/is (= second-jsond-evs
+                 (map #(.getDataAsMap (.getPayload %)) second-msgs)))))))
 
 ;; The following tests are going to be confusing unless you go read:
 ;; - https://github.com/latacora/unsiemly/issues/11
@@ -111,3 +116,9 @@
 
 (t/deftest ^:generative generative-test
   (t/is (every? (comp nil? :failure) (stest/check `fixed-roundtrip))))
+
+(t/deftest jsonify-val-test
+  (t/testing "keyword map keys are stringified"
+    (t/is (= (#'sd/jsonify-val {:nested 1.0}) {"nested" 1.0}))
+    (t/is (= (#'sd/jsonify-val {:deeply {:nested 1.0}}) {"deeply" {"nested" 1.0}}))
+    (t/is (= (#'sd/jsonify-val {::deeply {::nested 1.0}}) {"deeply" {"nested" 1.0}}))))

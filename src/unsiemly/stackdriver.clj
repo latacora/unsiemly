@@ -1,6 +1,7 @@
 (ns unsiemly.stackdriver
   (:require [clojure.spec.alpha :as s]
             [unsiemly.internal :as internal]
+            [unsiemly.xforms :as xf]
             [clojure.reflect :as refl]
             [com.rpl.specter :as sr])
   (:import (com.google.cloud.logging
@@ -54,6 +55,26 @@
      [sr/ALL p]))
    ->JustAMap x))
 
+(defn ^:private stringify-kw
+  "If something is a keyword, turn it into an (unqualified) string.
+
+  See [[jsonify-val]]."
+  [maybe-kw]
+  (if (keyword? maybe-kw) (name maybe-kw) maybe-kw))
+
+(defn ^:private jsonify-val
+  "Turns complex types into ones StackDriver will understand."
+  [x]
+  (->> x
+       (sr/transform xf/TREE-KEYS stringify-kw)
+       (sr/transform xf/TREE-LEAVES stringify-kw)))
+
+(def ^:private prepare-entry
+  "Given a nested value consisting of common Clojure types (maps, vecs, insts,
+  keywords...) turn it into something that StackDriver's LogEntry knows how to
+  serialize."
+  (comp noniterable-maps jsonify-val))
+
 (defn ^:private build-client!
   "Creates a StackDriver client."
   []
@@ -65,7 +86,7 @@
 (defn ^LogEntry ^:private ->log-entry
   "Given a JSON-able data structure, turns it into a StackDriver LogEntry object."
   [entry]
-  (LogEntry/of (Payload$JsonPayload/of (noniterable-maps entry))))
+  (LogEntry/of (Payload$JsonPayload/of (prepare-entry entry))))
 
 (defmethod internal/entries-callback :stackdriver
   [opts]

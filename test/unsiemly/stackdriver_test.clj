@@ -130,4 +130,12 @@
   (let [ref-time-iso8601 "2009-02-13T23:31:30.100Z"]
     (t/testing "insts are stringified"
       (t/is (= {"k" ref-time-iso8601}
-               (#'sd/jsonify-val {"k" (jt/instant ref-time-iso8601)}))))))
+               (#'sd/jsonify-val {"k" (jt/instant ref-time-iso8601)})))))
+
+  (t/testing "bools, nums, strs are untouched"
+    (t/is (= {"k" true}
+             (#'sd/jsonify-val {"k" true})))
+    (t/is (= {"k" 1.0}
+             (#'sd/jsonify-val {"k" 1.0})))
+    (t/is (= {"k" "v"}
+             (#'sd/jsonify-val {"k" "v"})))))

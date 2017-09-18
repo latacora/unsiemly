@@ -4,7 +4,8 @@
             [unsiemly.internal :as internal]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as sgen]
-            [clojure.spec.test.alpha :as stest])
+            [clojure.spec.test.alpha :as stest]
+            [java-time :as jt])
   (:import [com.google.cloud.logging
             LogEntry Payload$JsonPayload
             Logging Logging$WriteOption
@@ -119,6 +120,14 @@
 
 (t/deftest jsonify-val-test
   (t/testing "keyword map keys are stringified"
-    (t/is (= (#'sd/jsonify-val {:nested 1.0}) {"nested" 1.0}))
-    (t/is (= (#'sd/jsonify-val {:deeply {:nested 1.0}}) {"deeply" {"nested" 1.0}}))
-    (t/is (= (#'sd/jsonify-val {::deeply {::nested 1.0}}) {"deeply" {"nested" 1.0}}))))
+    (t/is (= {"nested" 1.0}
+             (#'sd/jsonify-val {:nested 1.0})))
+    (t/is (= {"deeply" {"nested" 1.0}}
+             (#'sd/jsonify-val {:deeply {:nested 1.0}})))
+    (t/is (= {"deeply" {"nested" 1.0}}
+             (#'sd/jsonify-val {::deeply {::nested 1.0}}))))
+
+  (let [ref-time-iso8601 "2009-02-13T23:31:30.100Z"]
+    (t/testing "insts are stringified"
+      (t/is (= {"k" ref-time-iso8601}
+               (#'sd/jsonify-val {"k" (jt/instant ref-time-iso8601)}))))))

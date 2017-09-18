@@ -67,7 +67,13 @@
   [x]
   (->> x
        (sr/transform xf/TREE-KEYS stringify-kw)
-       (sr/transform xf/TREE-LEAVES stringify-kw)))
+       (sr/transform
+        xf/TREE-LEAVES
+        (fn [x]
+          (cond
+            (keyword? x) (name x)
+            (inst? x) (xf/->iso8601 x)
+            :else x)))))
 
 (def ^:private prepare-entry
   "Given a nested value consisting of common Clojure types (maps, vecs, insts,

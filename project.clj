@@ -1,4 +1,4 @@
-(defproject com.latacora/unsiemly "0.1.1"
+(defproject com.latacora/unsiemly "0.2.0-SNAPSHOT"
   :description "Pleasant SIEM abstraction for Clojure"
   :url "https://github.com/latacora/unsiemly"
   :license {:name "Eclipse Public License"

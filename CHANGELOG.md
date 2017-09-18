@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
-Nothing yet!
+### Added
+
+- By default, the GCP implementation will coerce incoming data structures so
+  that they can be sent to StackDriver. Keywords will be turned into their name,
+  instants, their ISO8601 timestamps, and everything else will be str'd. (#10)
 
 ## [0.1.1] - 2017-09-17
 

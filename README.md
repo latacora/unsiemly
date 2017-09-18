@@ -5,7 +5,7 @@
 
 > unseemly |ˌənˈsēmlē|, adj.
 >
-> (of behavior or actions) not proper or appropriate: an unseemly squabble.
+> (of behavior or actions) not proper or appropriate: *an unseemly squabble*.
 
 > unsiemly |ˌənˈsēmlē|, noun
 >

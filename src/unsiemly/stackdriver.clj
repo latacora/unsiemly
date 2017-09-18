@@ -71,9 +71,10 @@
         xf/TREE-LEAVES
         (fn [x]
           (cond
+            (or (boolean? x) (number? x) (string? x)) x
             (keyword? x) (name x)
             (inst? x) (xf/->iso8601 x)
-            :else x)))))
+            :else (str x))))))
 
 (def ^:private prepare-entry
   "Given a nested value consisting of common Clojure types (maps, vecs, insts,

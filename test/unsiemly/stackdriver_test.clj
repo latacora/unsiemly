@@ -138,4 +138,8 @@
     (t/is (= {"k" 1.0}
              (#'sd/jsonify-val {"k" 1.0})))
     (t/is (= {"k" "v"}
-             (#'sd/jsonify-val {"k" "v"})))))
+             (#'sd/jsonify-val {"k" "v"}))))
+
+  (t/testing "other types strd"
+    (t/is (= {"k" "sym"}
+             (#'sd/jsonify-val {"k" 'sym})))))

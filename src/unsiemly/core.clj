@@ -5,6 +5,7 @@
    [unsiemly.stackdriver :as stackdriver]
    [unsiemly.elasticsearch :as elasticsearch]
    [manifold.stream :as ms]
+   [manifold.deferred :as md]
    [clojure.spec.alpha :as s]))
 
 (defn ->siem!
@@ -25,3 +26,10 @@
   (let [s (ms/stream)]
     (->siem! s opts)
     s))
+
+(defn process!
+  "Sends a single batch of msgs to a SIEM defined by opts. Returns a deferred that
+  will fire when the sending is complete."
+  [opts msgs]
+  (let [cb (internal/entries-callback opts)]
+    (md/future (cb msgs))))

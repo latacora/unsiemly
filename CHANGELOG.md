@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file. This change
 
 Nothing here yet.
 
+## [0.3.0] - 2017-09-18
+
+### Added
+
+- `process!` API, which takes a number of messages and returns a deferred that
+  fires when they have all been consumed. (#15, also related to #16)
+
 ## [0.2.0] - 2017-09-18
 
 ### Added
@@ -34,6 +41,7 @@ Initial release.
 - Basic StackDriver and Elasticsearch support
 - Basic data transforms, especially for timestamps
 
-[Unreleased]: https://github.com/latacora/unsiemly/compare/0.2.0...HEAD
+[Unreleased]: https://github.com/latacora/unsiemly/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/latacora/unsiemly/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/latacora/unsiemly/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/latacora/unsiemly/compare/0.1.0...0.1.1

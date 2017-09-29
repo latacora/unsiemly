@@ -2,11 +2,13 @@
   (:gen-class)
   (:require
    [unsiemly.internal :as internal]
-   [unsiemly.stackdriver :as stackdriver]
-   [unsiemly.elasticsearch :as elasticsearch]
    [manifold.stream :as ms]
    [manifold.deferred :as md]
    [clojure.spec.alpha :as s]))
+
+;; side-effecty requires:
+(require '[unsiemly.stackdriver])
+(require '[unsiemly.elasticsearch])
 
 (defn ->siem!
   "Consume everything in the given source, transform it and send it to a SIEM, as

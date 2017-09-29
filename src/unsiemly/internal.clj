@@ -13,17 +13,10 @@
 
 (s/def ::u/siem-type #{:stdout :elasticsearch :stackdriver})
 (s/def ::u/log-name string?)
-
 (def base-req-keys [::u/siem-type ::u/log-name])
-
 (s/def ::u/base-opts (eval `(s/keys :req ~base-req-keys)))
 
 (defmulti opts-spec ::u/siem-type)
-(defmethod opts-spec :stdout [_] ::u/base-opts)
-
 (s/def ::u/opts (s/multi-spec opts-spec ::u/siem-type))
 
 (defmulti entries-callback ::u/siem-type)
-(defmethod entries-callback :stdout
-  [opts]
-  (fn [entries] (doseq [e entries] (println e))))

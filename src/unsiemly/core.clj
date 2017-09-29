@@ -9,6 +9,7 @@
 ;; side-effecty requires:
 (require '[unsiemly.stackdriver])
 (require '[unsiemly.elasticsearch])
+(require '[unsiemly.stdout])
 
 (defn ->siem!
   "Consume everything in the given source, transform it and send it to a SIEM, as

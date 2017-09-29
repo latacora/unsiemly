@@ -50,8 +50,13 @@ The following options exist regardless of your specific SIEM type:
      using; for example, on ElasticSearch this will set index names, but on
      StackDriver it will set the log name.
 
-A simple builtin `:stdout` SIEM type exists that just prints each message. It
-takes no additional options.
+A simple builtin `:stdout` SIEM type exists that just prints each message. The
+following options exist (where `stdout` is an alias for the `unsiemly.stdout`
+namespace):
+
+   * `::stdout/pretty-print` (boolean, optional): if true, pretty prints the
+     records to stdout. If false or unset, uses regular println (which mushes
+     everything together on one line).
 
 For ElasticSearch, the `::u/siem-type` value is `:elasticsearch`. The indices
 are automatically partitioned by day, formatted as `$yourlogname-yyyy-MM-dd`.

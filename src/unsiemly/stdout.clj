@@ -1,11 +1,21 @@
 (ns unsiemly.stdout
   (:require [unsiemly.internal :as internal]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [clojure.pprint :as pp]))
 
 (alias 'u 'unsiemly)
 
-(defmethod internal/entries-callback :stdout
-  [opts]
-  (fn [entries] (doseq [e entries] (println e))))
+(s/def ::pretty-printed boolean?)
+(s/def ::opts
+  (s/and
+   ::u/base-opts
+   (s/keys :opt [::pretty-printed])))
 
-(defmethod internal/opts-spec :stdout [_] ::u/base-opts)
+(defmethod internal/opts-spec :stdout [_]
+  ::opts)
+
+(defmethod internal/entries-callback :stdout
+  [{::keys [pretty-printed]}]
+  (let [printer (if pretty-printed pp/pprint println)]
+    (fn [entries]
+      (doseq [e entries] (printer e)))))

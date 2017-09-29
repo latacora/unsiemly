@@ -4,14 +4,18 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
-Nothing here yet.
+### Added
+
+- Pretty printing support for stdout, enabled by setting
+  `::unsiemly.stdout/pretty-printed` to `true` (or the `STDOUT_PRETTY_PRINTED`
+  environment variable to the string `true`).
 
 ## [0.3.0] - 2017-09-18
 
 ### Added
 
 - `process!` API, which takes a number of messages and returns a deferred that
-  fires when they have all been consumed. (#15, also related to #16)
+   fires when they have all been consumed. (#15, also related to #16)
 
 ## [0.2.0] - 2017-09-18
 

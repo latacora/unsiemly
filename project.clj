@@ -11,18 +11,18 @@
                  [camel-snake-kebab "0.4.0"]
 
                  ;; xforms
-                 [com.rpl/specter "1.0.3"]
+                 [com.rpl/specter "1.0.5"]
 
                  ;; -> ElasticSearch
-                 [cc.qbits/spandex "0.5.2"]
+                 [cc.qbits/spandex "0.5.4"]
 
                  ;; -> AWS ES
-                 [vc.inreach.aws/aws-signing-request-interceptor "0.0.16"]
-                 [com.amazonaws/aws-java-sdk-core "1.11.197"
+                 [vc.inreach.aws/aws-signing-request-interceptor "0.0.20"]
+                 [com.amazonaws/aws-java-sdk-core "1.11.240"
                   :exclusions [commons-logging]]
 
                  ;; -> StackDriver
-                 [com.google.cloud/google-cloud-logging "1.5.1"]]
+                 [com.google.cloud/google-cloud-logging "1.12.0"]]
 
   :main ^:skip-aot unsiemly.core
   :target-path "target/%s"
@@ -35,7 +35,7 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]
                                   ;; ;; just for joda-time conversions:
-                                  [clj-time "0.14.0"]]}}
+                                  [clj-time "0.14.2"]]}}
 
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]])

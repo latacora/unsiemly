@@ -4,11 +4,19 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+Nothing yet!
+
+## [0.4.0] - 2017-11-30
+
 ### Added
 
 - Pretty printing support for stdout, enabled by setting
   `::unsiemly.stdout/pretty-printed` to `true` (or the `STDOUT_PRETTY_PRINTED`
   environment variable to the string `true`).
+
+### Changed
+
+- Upgraded dependencies
 
 ## [0.3.0] - 2017-09-18
 

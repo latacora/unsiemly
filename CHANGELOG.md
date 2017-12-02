@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
-Nothing yet!
+### Fixed
+
+- Setting the `STDOUT_PRETTY_PRINTED` environment variable worked incorrectly:
+  its behavior was not to pretty print if unset, and pretty print if set to any
+  value. The intended behavior (now implemented) was to set it if the
+  environment variable was set to `"true"`, and unset it if the environment
+  variable was unset or set to `"false"`. (This is a minor bug, since it only
+  affected you if you were setting the environment variable to `"false"` or an
+  invalid value.)
 
 ## [0.4.0] - 2017-11-30
 

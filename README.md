@@ -57,6 +57,8 @@ namespace):
    * `::stdout/pretty-print` (boolean, optional): if true, pretty prints the
      records to stdout. If false or unset, uses regular println (which mushes
      everything together on one line).
+   * `::stdout/format` (keyword, optional): `:str` for newline-delimited Clojure
+     pr strs (not EDN!), `:json` for newline-delimited JSON.
 
 For ElasticSearch, the `::u/siem-type` value is `:elasticsearch`. The indices
 are automatically partitioned by day, formatted as `$yourlogname-yyyy-MM-dd`.

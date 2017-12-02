@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### Added
+
+- JSON support for the stdout reporter. To use it, set the `::stdout/format` opt
+  to `:json` (or `STDOUT_FORMAT` env var to "json"). Pretty printing also works
+  for JSON.
+
 ### Fixed
 
 - Setting the `STDOUT_PRETTY_PRINTED` environment variable worked incorrectly:

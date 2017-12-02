@@ -17,6 +17,7 @@
 
 (def ^:private env-value-parser
   {:siem-type keyword
+   :stdout-pretty-printed parse-bool
    :elasticsearch-hosts parse-list
    :elasticsearch-aws-request-signing parse-bool})
 

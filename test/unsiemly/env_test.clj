@@ -2,7 +2,8 @@
   (:require [unsiemly.env :as env]
             [unsiemly.elasticsearch :as es]
             [clojure.test :as t]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [unsiemly.stdout :as stdout]))
 
 ;; Side-effecting require: this loads ES and StackDriver namespaces, which in
 ;; turn defines some specs that this needs.
@@ -33,6 +34,18 @@
                     ::es/hosts ["127.0.0.1:1234" "127.0.0.1:5678"]
                     ::es/aws-request-signing true
                     ::es/aws-region "us-west-1"}
+          opts (env/opts-from-env!)]
+      (t/is (nil? (s/explain-data ::u/opts expected)))
+      (t/is (nil? (s/explain-data ::u/opts opts)))
+      (t/is (= expected opts)))))
+
+(t/deftest opts-from-env-stdout-test
+  (with-redefs [environ.core/env {:siem-type "stdout"
+                                  :log-name "my-log"
+                                  :stdout-pretty-printed "true"}]
+    (let [expected {::u/siem-type :stdout
+                    ::u/log-name "my-log"
+                    ::stdout/pretty-printed true}
           opts (env/opts-from-env!)]
       (t/is (nil? (s/explain-data ::u/opts expected)))
       (t/is (nil? (s/explain-data ::u/opts opts)))

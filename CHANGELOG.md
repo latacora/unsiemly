@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- The stdout sink now explicitly flushes on every callback call.
 
 ## [0.5.0] -- 2017-12-01
 

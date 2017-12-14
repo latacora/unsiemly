@@ -25,4 +25,5 @@
                   (json/generate-stream obj *out* {:pretty pretty-printed})
                   (println)))]
     (fn [entries]
-      (doseq [e entries] (printer e)))))
+      (doseq [e entries] (printer e))
+      (flush))))

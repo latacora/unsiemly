@@ -80,7 +80,6 @@ The following options exist (were `es` is an alias for the
      ElasticSearch service: the region is required to perform signatures
      correctly.
 
-
 For GCP StackDriver, the `::u/siem-type` value is `:stackdriver` and no extra
 options exist. Credentials are automatically taken from the environment as per
 the GCP SDK.

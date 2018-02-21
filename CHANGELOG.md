@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.7.0] -- 2018-02-21
+
 ### Added
 
 - BigQuery support. `::unsiemly/siem-type` is `:bigquery`. Project id, dataset
@@ -83,7 +85,8 @@ Initial release.
 - Basic StackDriver and Elasticsearch support
 - Basic data transforms, especially for timestamps
 
-[Unreleased]: https://github.com/latacora/unsiemly/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/latacora/unsiemly/compare/0.7.0...HEAD
+[0.6.0]: https://github.com/latacora/unsiemly/compare/0.6.0...0.7.0
 [0.5.0]: https://github.com/latacora/unsiemly/compare/0.5.0...0.6.0
 [0.4.0]: https://github.com/latacora/unsiemly/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/latacora/unsiemly/compare/0.3.0...0.4.0

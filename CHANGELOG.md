@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- BigQuery support. `::unsiemly/siem-type` is `:bigquery`. Project id, dataset
+  id and table id can be explicitly configured via keys in the
+  `unsiemly.bigquery` namespace; if no explicit BigQuery-specific keys are
+  provided, will use the default project, the log name as the dataset id and
+  `unsiemly" as the table id.`
 
 ## [0.6.0] -- 2017-12-14
 

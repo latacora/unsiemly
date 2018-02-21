@@ -22,7 +22,10 @@
                   :exclusions [commons-logging]]
 
                  ;; -> StackDriver
-                 [com.google.cloud/google-cloud-logging "1.12.0"]]
+                 [com.google.cloud/google-cloud-logging "1.16.0"]
+
+                 ;; -> BigQuery
+                 [com.google.cloud/google-cloud-bigquery "0.34.0-beta"]]
 
   :main ^:skip-aot unsiemly.core
   :target-path "target/%s"

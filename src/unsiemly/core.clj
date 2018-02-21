@@ -8,6 +8,7 @@
 
 ;; side-effecty requires:
 (require '[unsiemly.stackdriver])
+(require '[unsiemly.bigquery])
 (require '[unsiemly.elasticsearch])
 (require '[unsiemly.stdout])
 

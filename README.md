@@ -85,6 +85,18 @@ For GCP StackDriver, the `::u/siem-type` value is `:stackdriver` and no extra
 options exist. Credentials are automatically taken from the environment as per
 the GCP SDK.
 
+For GCP BigQuery, the `::u/siem-type` value is `:bigquery` and the following
+extra options exist (where `:bq` is an alias for the `unsiemly.bigquery`
+namespace):
+
+  * `::ub/project-id` is the string name of the project to send data to.
+  * `::ub/dataset-id` is the string name of the dataset to send data to.
+  * `::ub/table-id` is the string name of the table to send data to.
+
+If the project id is unspecified, uses the default project. If the dataset id is
+unspecified, the `::u/log-name` is used. If the table id is unspecified,
+`unsiemly` is used.
+
 ### Manifold stream 101
 
 To put stuff onto a stream:

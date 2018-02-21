@@ -62,8 +62,8 @@
   [maybe-kw]
   (if (keyword? maybe-kw) (name maybe-kw) maybe-kw))
 
-(defn ^:private jsonify-val
-  "Turns complex types into ones StackDriver will understand."
+(defn jsonify-val
+  "Turns complex types into ones StackDriver or BigQuery will understand."
   [x]
   (->> x
        (sr/transform xf/TREE-KEYS stringify-kw)

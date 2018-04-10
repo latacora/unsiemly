@@ -1,21 +1,41 @@
 (ns unsiemly.bigquery-test
   (:require [unsiemly.bigquery :as ub]
             [clojure.test :as t]
-            [unsiemly.internal :as internal])
-  (:import (com.google.cloud.bigquery BigQuery InsertAllRequest InsertAllResponse)))
+            [unsiemly.internal :as internal]
+            [clojure.string :as str])
+  (:import (com.google.cloud.bigquery BigQuery BigQueryError InsertAllRequest InsertAllResponse)))
 
 (alias 'u 'unsiemly)
+
+(def error-xf
+  (comp
+   (map-indexed
+    (fn [i r]
+      (when (= (.getContent r) {"nasty" "error"})
+        [i [(BigQueryError. "test reason" "test location" "test message")]])))
+   (filter some?)))
+
+(def ^:private ->InsertAllResponse
+  ;; don't tell me what to do computer I literally own you
+  (let [c (-> InsertAllResponse .getDeclaredConstructors first)]
+    (.setAccessible c true)
+    #(.newInstance c (object-array [%]))))
+
+(defn fake-build-client!
+  [insert-requests]
+  (fn []
+    (proxy [BigQuery] []
+      (insertAll [^InsertAllRequest request]
+        (def my-req request)
+        (swap! insert-requests conj request)
+        (->> (.getRows request)
+             (into {} error-xf)
+             ->InsertAllResponse)))))
 
 (t/deftest entries-callback-test
   (let [insert-requests (atom [])]
     (with-redefs
-      [unsiemly.bigquery/build-client!
-       (fn []
-         (proxy [BigQuery] []
-           (insertAll [request]
-             (swap! insert-requests conj request)
-             nil ;; Have to return a InsertAllResponse
-             )))]
+      [unsiemly.bigquery/build-client! (fake-build-client! insert-requests)]
 
       (let [cb (internal/entries-callback
                 {::u/siem-type :bigquery
@@ -49,4 +69,13 @@
         (t/is (= "myproject" (.getProject id)))
 
         (t/is (= [{"a" "3"} {"b" "4"}]
-                 (map #(.getContent %) (.getRows req))))))))
+                 (map #(.getContent %) (.getRows req)))))
+
+      (let [cb (internal/entries-callback
+                {::u/siem-type :bigquery
+                 ::ub/project-id "myproject"
+                 ::ub/dataset-id "mydataset"
+                 ::ub/table-id "mytable"})
+            out (with-out-str (cb [{:a "5"} {"nasty" "error"}]))]
+        (t/is (str/includes? out "inserting bigquery record at index 1"))
+        (t/is (str/includes? out "BigQueryError{reason=test reason, location=test location, message=test message}"))))))

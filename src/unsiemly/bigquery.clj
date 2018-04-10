@@ -1,6 +1,7 @@
 (ns unsiemly.bigquery
   (:require [unsiemly.stackdriver :refer [jsonify-val]]
             [unsiemly.internal :as internal]
+            [taoensso.timbre :refer [error]]
             [clojure.spec.alpha :as s])
   (:import (com.google.cloud.bigquery
             BigQueryOptions
@@ -32,5 +33,9 @@
                 (TableId/of dataset-id table-id))
         client (build-client!)]
     (fn bigquery-entries-callback [entries]
-      (let [req (InsertAllRequest/of ^TableId table ^Iterable (map ->row entries))]
-        (.insertAll client req)))))
+      (let [req (InsertAllRequest/of ^TableId table ^Iterable (map ->row entries))
+            res (.insertAll client req)]
+        (doseq [[idx errs] (.getInsertErrors res)
+                err errs
+                :let [msg (format "inserting bigquery record at index %s" idx)]]
+          (error msg err))))))

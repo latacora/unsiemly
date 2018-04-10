@@ -9,6 +9,7 @@
                  [environ "1.1.0"]
                  [clojure.java-time "0.3.1"]
                  [camel-snake-kebab "0.4.0"]
+                 [com.taoensso/timbre "4.10.0"]
 
                  ;; xforms
                  [com.rpl/specter "1.1.0"]

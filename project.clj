@@ -7,7 +7,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [manifold "0.1.7-alpha5"]
                  [environ "1.1.0"]
-                 [clojure.java-time "0.3.1"]
+                 [clojure.java-time "0.3.2"]
                  [camel-snake-kebab "0.4.0"]
                  [com.taoensso/timbre "4.10.0"]
 
@@ -15,18 +15,18 @@
                  [com.rpl/specter "1.1.0"]
 
                  ;; -> ElasticSearch
-                 [cc.qbits/spandex "0.5.5"]
+                 [cc.qbits/spandex "0.6.2"]
 
                  ;; -> AWS ES
                  [vc.inreach.aws/aws-signing-request-interceptor "0.0.20"]
-                 [com.amazonaws/aws-java-sdk-core "1.11.281"
+                 [com.amazonaws/aws-java-sdk-core "1.11.312"
                   :exclusions [commons-logging]]
 
                  ;; -> StackDriver
-                 [com.google.cloud/google-cloud-logging "1.16.0"]
+                 [com.google.cloud/google-cloud-logging "1.25.0"]
 
                  ;; -> BigQuery
-                 [com.google.cloud/google-cloud-bigquery "0.34.0-beta"]]
+                 [com.google.cloud/google-cloud-bigquery "1.25.0"]]
 
   :main ^:skip-aot unsiemly.core
   :target-path "target/%s"
@@ -39,7 +39,7 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]
                                   ;; ;; just for joda-time conversions:
-                                  [clj-time "0.14.2"]]}}
+                                  [clj-time "0.14.3"]]}}
 
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]])

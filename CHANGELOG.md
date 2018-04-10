@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## [0.8.0] -- 2018-04-10
+
+### Added
+
+- BigQuery now reports errors on insertion. Previously, BigQuery may error
+  silently, typically when the connection itself worked, but e.g. a table didn't
+  exist or the data is in the wrong format.
+
+### Changed
+
+- Bumped dependencies.
+
 ## [0.7.0] -- 2018-02-21
 
 ### Added
@@ -85,7 +97,8 @@ Initial release.
 - Basic StackDriver and Elasticsearch support
 - Basic data transforms, especially for timestamps
 
-[Unreleased]: https://github.com/latacora/unsiemly/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/latacora/unsiemly/compare/0.8.0...HEAD
+[0.6.0]: https://github.com/latacora/unsiemly/compare/0.7.0...0.8.0
 [0.6.0]: https://github.com/latacora/unsiemly/compare/0.6.0...0.7.0
 [0.5.0]: https://github.com/latacora/unsiemly/compare/0.5.0...0.6.0
 [0.4.0]: https://github.com/latacora/unsiemly/compare/0.4.0...0.5.0

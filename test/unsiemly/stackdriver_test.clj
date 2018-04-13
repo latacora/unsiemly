@@ -96,7 +96,7 @@
 (s/fdef fixed-roundtrip :args (s/cat :x ::rt/map) :re ::rt/map)
 ;; toplevel is a map not a value: has to be a JSON object aka map.
 
-(defn fixed-roundtrip
+(defn fixed-noniterable-map-roundtrip
   "Like [[roundtrip]], but first wraps this thing in noniterable-map, so more
   things should roundtrip."
   [x]
@@ -107,16 +107,20 @@
     (t/is (= {"a" [["b" [["c" 1.0] ["d" 2.0]]]]}
              (roundtrip {"a" {"b" {"c" 1 "d" 2}}}))))
 
-  (t/testing "nested map with noniterable-maps workaround"
+  (t/testing "nested map"
     (let [m {"a" {"b" {"c" 1.0}}}]
-      (t/is (= m (fixed-roundtrip m)))))
+      (t/is (= m (fixed-noniterable-map-roundtrip m)))))
 
-  (t/testing "nested map with vecs with noniterable-maps workaround"
+  (t/testing "nested map with vecs"
     (let [m {"a" {"b" [{"c" 1.0} {"d" 2.0}]}}]
-      (t/is (= m (fixed-roundtrip m))))))
+      (t/is (= m (fixed-noniterable-map-roundtrip m)))))
+
+  (t/testing "nested map with lists"
+    (let [m {"a" {"b" (list {"c" 1.0} {"d" 2.0})}}]
+      (t/is (= m (fixed-noniterable-map-roundtrip m))))))
 
 (t/deftest ^:generative generative-test
-  (t/is (every? (comp nil? :failure) (stest/check `fixed-roundtrip))))
+  (t/is (every? (comp nil? :failure) (stest/check `fixed-noniterable-maps-roundtrip))))
 
 (t/deftest jsonify-val-test
   (t/testing "keyword map keys are stringified"

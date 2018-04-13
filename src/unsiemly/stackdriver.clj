@@ -63,7 +63,7 @@
      (fn [obj] (and (instance? Iterable obj) (instance? java.util.Map obj)))
      (sr/continue-then-stay sr/MAP-VALS p)
 
-     vector?
+     coll?
      [sr/ALL p]))
    ->JustAMap x))
 

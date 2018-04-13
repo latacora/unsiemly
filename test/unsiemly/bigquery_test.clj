@@ -3,7 +3,12 @@
             [clojure.test :as t]
             [unsiemly.internal :as internal]
             [clojure.string :as str])
-  (:import (com.google.cloud.bigquery BigQuery BigQueryError InsertAllRequest InsertAllResponse)))
+  (:import (com.google.cloud.bigquery
+            BigQuery
+            BigQueryError
+            InsertAllRequest
+            InsertAllResponse
+            InsertAllRequest$RowToInsert)))
 
 (alias 'u 'unsiemly)
 
@@ -79,3 +84,31 @@
             out (with-out-str (cb [{:a "5"} {"nasty" "error"}]))]
         (t/is (str/includes? out "inserting bigquery record at index 1"))
         (t/is (str/includes? out "BigQueryError{reason=test reason, location=test location, message=test message}"))))))
+
+(def roundtrip
+  (comp #(.getContent ^InsertAllRequest$RowToInsert %) #'ub/->row))
+
+(t/deftest bigquery-roundtrip-tests
+  (t/testing "nested maps"
+    (let [m {"a" {"a" {"c" 1}}}]
+      (t/is (= (roundtrip m) m))))
+
+  ;; Note: when you feed bigquery LazySeqs, you get mysterious failures. I
+  ;; haven't been able to demonstrate this by simply roundtripping through the
+  ;; row type, unlike with StackDriver, which has a similar bizarre bug. So for
+  ;; now you'll just have to take my word for it that vecs work and seqs/lists
+  ;; don't.
+
+  (t/testing "lists -> vecs"
+    (let [x {"a" '(1 2 3)}
+          y {"a" [1 2 3]}
+          roundtripped (roundtrip x)]
+      (t/is (= roundtripped y))
+      (t/is (vector? (.get roundtripped "a")))))
+
+  (t/testing "seqs -> vecs"
+    (let [x {"a" (range 20)}
+          y {"a" (vec (range 20))}
+          roundtripped (roundtrip x)]
+      (t/is (= roundtripped y))
+      (t/is (vector? (.get roundtripped "a"))))))

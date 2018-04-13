@@ -2,7 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [unsiemly.internal :as internal]
             [unsiemly.xforms :as xf]
-            [clojure.reflect :as refl]
             [com.rpl.specter :as sr])
   (:import (com.google.cloud.logging
              LogEntry Payload$JsonPayload
@@ -15,84 +14,11 @@
 (s/def ::project-id string?)
 (defmethod internal/opts-spec :stackdriver [_] ::u/base-opts)
 
-(defmacro defproxytype
-  "Creates a type with given name that implements only the given interface. The
-  type will have one constructor, taking an object that implements the same
-  interface. Instances of this type will proxy the instance you give it,
-  exposing only the behavior of that interface.
-
-  This is useful when you have an object implementing multiple interfaces A,
-  B... and you need to interact with some code that does bogus type checking in
-  the wrong order (e.g. checking if it's a B first when you want it to act like
-  an A). So, create a proxy type for A, wrap your x in the proxy type, and now
-  you have x-except-only-looks-like-an-A.
-
-  This uses deftype internally so you'll also get a ->TypeName fn for free.
-
-  To see why this is necessary:
-  - https://github.com/latacora/unsiemly/issues/11
-  - https://github.com/GoogleCloudPlatform/google-cloud-java/issues/2432
-  "
-  [type-name iface-sym]
-  (let [iface (Class/forName (str iface-sym))
-        {:keys [members]} (refl/reflect iface)
-        wrapped-obj '(.-obj this)]
-    `(deftype ~type-name [~(with-meta 'obj {:tag iface})]
-       ~iface-sym
-       ~@(for [{:keys [name parameter-types return-type]} members
-               :let [m (with-meta (symbol name) {:tag return-type})
-                     args (map (fn [arg-idx arg-type]
-                                 (with-meta
-                                   (symbol (str "arg" arg-idx))
-                                   {:tag arg-type}))
-                               (range) parameter-types)]]
-           `(~m [~'this ~@args] (. ~wrapped-obj ~m ~@args))))))
-
-(defproxytype JustAMap java.util.Map)
-
-(defn ^:private noniterable-maps
-  "Finds all maps that are also iterable in the (nested) data structure x, and
-  replace them with zero-copy map replacements that are not also iterable.
-
-  For a rationale, see #11."
-  [x]
-  (sr/transform
-   (sr/recursive-path
-    [] p
-    (sr/cond-path
-     (fn [obj] (and (instance? Iterable obj) (instance? java.util.Map obj)))
-     (sr/continue-then-stay sr/MAP-VALS p)
-
-     coll?
-     [sr/ALL p]))
-   ->JustAMap x))
-
-(defn ^:private stringify-kw
-  "If something is a keyword, turn it into an (unqualified) string.
-
-  See [[jsonify-val]]."
-  [maybe-kw]
-  (if (keyword? maybe-kw) (name maybe-kw) maybe-kw))
-
-(defn jsonify-val
-  "Turns complex types into ones StackDriver or BigQuery will understand."
-  [x]
-  (->> x
-       (sr/transform xf/TREE-KEYS stringify-kw)
-       (sr/transform
-        xf/TREE-LEAVES
-        (fn [x]
-          (cond
-            (or (boolean? x) (number? x) (string? x)) x
-            (keyword? x) (name x)
-            (inst? x) (xf/->iso8601 x)
-            :else (str x))))))
-
 (def ^:private prepare-entry
   "Given a nested value consisting of common Clojure types (maps, vecs, insts,
   keywords...) turn it into something that StackDriver's LogEntry knows how to
   serialize."
-  (comp noniterable-maps jsonify-val))
+  (comp xf/noniterable-maps xf/jsonify-val))
 
 (defn ^:private build-client!
   "Creates a StackDriver client."

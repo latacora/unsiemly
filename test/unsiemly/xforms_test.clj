@@ -57,3 +57,32 @@
                     (fn [x] {:a [{:b x} {:c x} {:d :something-else} {:nested {:e x}}]})]]
     (t/is (= (template ref-time-iso8601) (xf/insts->iso8601 (template inst)))
           (str inst-descr))))
+
+(t/deftest jsonify-val-test
+  (t/testing "keyword map keys are stringified"
+    (t/is (= {"nested" 1.0}
+             (xf/jsonify-val {:nested 1.0})))
+    (t/is (= {"deeply" {"nested" 1.0}}
+             (xf/jsonify-val {:deeply {:nested 1.0}})))
+    (t/is (= {"deeply" {"nested" 1.0}}
+             (xf/jsonify-val {::deeply {::nested 1.0}}))))
+
+  (let [ref-time-iso8601 "2009-02-13T23:31:30.100Z"]
+    (t/testing "insts are stringified"
+      (t/is (= {"k" ref-time-iso8601}
+               (xf/jsonify-val {"k" (jt/instant ref-time-iso8601)})))))
+
+  (t/testing "bools, nums, strs are untouched"
+    (t/is (= {"k" true}
+             (xf/jsonify-val {"k" true})))
+    (t/is (= {"k" 1.0}
+             (xf/jsonify-val {"k" 1.0})))
+    (t/is (= {"k" "v"}
+             (xf/jsonify-val {"k" "v"}))))
+
+  (t/testing "other types strd"
+    (t/is (= {"k" "sym"}
+             (xf/jsonify-val {"k" 'sym})))))
+
+;; Psst: noniterable-maps is tested via the Stackdriver tests because that's
+;; where we first saw the behavior. See #18 for fixing that.

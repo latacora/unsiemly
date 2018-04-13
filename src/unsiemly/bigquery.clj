@@ -1,8 +1,8 @@
 (ns unsiemly.bigquery
-  (:require [unsiemly.stackdriver :refer [jsonify-val]]
-            [unsiemly.internal :as internal]
-            [taoensso.timbre :refer [error]]
-            [clojure.spec.alpha :as s])
+  (:require [unsiemly.internal :as internal]
+            [taoensso.timbre :refer [error info]]
+            [clojure.spec.alpha :as s]
+            [unsiemly.xforms :as xf])
   (:import (com.google.cloud.bigquery
             BigQueryOptions
             InsertAllRequest
@@ -22,7 +22,9 @@
   (.getService (BigQueryOptions/getDefaultInstance)))
 
 (def ^:private ->row
-  (comp #(InsertAllRequest$RowToInsert/of %) jsonify-val))
+  (comp #(InsertAllRequest$RowToInsert/of %)
+        xf/jsonify-val
+        xf/seqs->vecs))
 
 (defmethod internal/entries-callback :bigquery
   [{:keys [::table-id ::dataset-id ::project-id ::u/log-name]}]

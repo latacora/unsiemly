@@ -5,7 +5,8 @@
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as sgen]
             [clojure.spec.test.alpha :as stest]
-            [java-time :as jt])
+            [java-time :as jt]
+            [unsiemly.xforms :as xf])
   (:import [com.google.cloud.logging
             LogEntry Payload$JsonPayload
             Logging Logging$WriteOption
@@ -98,9 +99,10 @@
 
 (defn fixed-noniterable-map-roundtrip
   "Like [[roundtrip]], but first wraps this thing in noniterable-map, so more
-  things should roundtrip."
+  things should roundtrip correctly. This basically tests that noniterable-map
+  is smart enough to make GCP do the right thing when serializing data."
   [x]
-  (roundtrip (#'sd/noniterable-maps x)))
+  (roundtrip (xf/noniterable-maps x)))
 
 (t/deftest noniterable-maps-test
   (t/testing "regression test (if this fails GCP fixed a bug; go delete the workaround)"
@@ -121,29 +123,3 @@
 
 (t/deftest ^:generative generative-test
   (t/is (every? (comp nil? :failure) (stest/check `fixed-noniterable-maps-roundtrip))))
-
-(t/deftest jsonify-val-test
-  (t/testing "keyword map keys are stringified"
-    (t/is (= {"nested" 1.0}
-             (#'sd/jsonify-val {:nested 1.0})))
-    (t/is (= {"deeply" {"nested" 1.0}}
-             (#'sd/jsonify-val {:deeply {:nested 1.0}})))
-    (t/is (= {"deeply" {"nested" 1.0}}
-             (#'sd/jsonify-val {::deeply {::nested 1.0}}))))
-
-  (let [ref-time-iso8601 "2009-02-13T23:31:30.100Z"]
-    (t/testing "insts are stringified"
-      (t/is (= {"k" ref-time-iso8601}
-               (#'sd/jsonify-val {"k" (jt/instant ref-time-iso8601)})))))
-
-  (t/testing "bools, nums, strs are untouched"
-    (t/is (= {"k" true}
-             (#'sd/jsonify-val {"k" true})))
-    (t/is (= {"k" 1.0}
-             (#'sd/jsonify-val {"k" 1.0})))
-    (t/is (= {"k" "v"}
-             (#'sd/jsonify-val {"k" "v"}))))
-
-  (t/testing "other types strd"
-    (t/is (= {"k" "sym"}
-             (#'sd/jsonify-val {"k" 'sym})))))

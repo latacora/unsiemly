@@ -22,9 +22,7 @@
   (.getService (BigQueryOptions/getDefaultInstance)))
 
 (def ^:private ->row
-  (comp #(InsertAllRequest$RowToInsert/of %)
-        xf/jsonify-val
-        xf/seqs->vecs))
+  (comp #(InsertAllRequest$RowToInsert/of %) xf/jsonify-val))
 
 (defmethod internal/entries-callback :bigquery
   [{:keys [::table-id ::dataset-id ::project-id ::u/log-name]}]

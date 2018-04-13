@@ -147,11 +147,7 @@
    ->JustAMap x))
 
 (defn seqs->vecs
-  "Finds all seqs and lists in the nested data structure and turns them into vectors.
-
-  BigQuery gets horribly confused when you give it a Clojure list, which is a
-  List but also lazy. I looked through the code and I'm not sure why. Vecs work
-  though."
+  "Finds all seqs and lists in the nested data structure and turns them into vectors."
   [x]
   (sr/transform
    (sr/recursive-path

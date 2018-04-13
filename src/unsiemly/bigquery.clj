@@ -37,5 +37,6 @@
             res (.insertAll client req)]
         (doseq [[idx errs] (.getInsertErrors res)
                 err errs
-                :let [msg (format "inserting bigquery record at index %s" idx)]]
-          (error msg err))))))
+                :let [msg (format "inserting bigquery record at index %s" idx)
+                      row (-> req .getRows (nth idx))]]
+          (error msg err "offending row:" row))))))

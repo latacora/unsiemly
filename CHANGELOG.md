@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [0.9.0] -- 2018-04-13
+
+### Changed
+
+- BigQuery now has much better error reporting. When a row fails, it also shows
+  the actual failing row, not just its index.
+- NESTED, TREE-VALS and TREE-KEYS now work on more than just vecs: including
+  lists, seqs, sets...
+- BigQuery had a bizarre bug that would cause obtuse failures if you gave it a
+  list or seq instead of a vec. The real root cause is unknown, but this version
+  includes a workaround.
+- Docstring improvements
+- A bunch of functionality that was "stuck" in the StackDriver namespace, mostly
+  marked private, is now made public in the `unsiemly.xforms` namespace.
+
 ## [0.8.0] -- 2018-04-10
 
 ### Added
@@ -97,11 +114,12 @@ Initial release.
 - Basic StackDriver and Elasticsearch support
 - Basic data transforms, especially for timestamps
 
-[Unreleased]: https://github.com/latacora/unsiemly/compare/0.8.0...HEAD
-[0.6.0]: https://github.com/latacora/unsiemly/compare/0.7.0...0.8.0
-[0.6.0]: https://github.com/latacora/unsiemly/compare/0.6.0...0.7.0
-[0.5.0]: https://github.com/latacora/unsiemly/compare/0.5.0...0.6.0
-[0.4.0]: https://github.com/latacora/unsiemly/compare/0.4.0...0.5.0
+[Unreleased]: https://github.com/latacora/unsiemly/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/latacora/unsiemly/compare/0.8.0...0.9.0
+[0.8.0]: https://github.com/latacora/unsiemly/compare/0.7.0...0.8.0
+[0.7.0]: https://github.com/latacora/unsiemly/compare/0.6.0...0.7.0
+[0.6.0]: https://github.com/latacora/unsiemly/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/latacora/unsiemly/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/latacora/unsiemly/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/latacora/unsiemly/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/latacora/unsiemly/compare/0.1.1...0.2.0

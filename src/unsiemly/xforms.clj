@@ -33,17 +33,20 @@
   (sr/recursive-path
    [] p
    (sr/cond-path
-    vector? [sr/ALL p]
     map? [sr/MAP-VALS p]
+    coll? [sr/ALL p]
     sr/STAY sr/STAY)))
 
 (def NESTED
-  "A specter selector for junctions in nested data structures."
+  "A specter selector for junctions in nested data structures.
+
+  This does post-order traversal. That's useful so that if you're going to
+  modify the data structures it finds, that's as efficient as possible."
   (sr/recursive-path
    [] p
    (sr/cond-path
-    vector? (sr/stay-then-continue sr/ALL p)
-    map? (sr/stay-then-continue sr/MAP-VALS p))))
+    map? (sr/continue-then-stay sr/MAP-VALS p)
+    coll? (sr/continue-then-stay sr/ALL p))))
 
 (def TREE-KEYS
   "A specter selector for all of the map keys in a nested tree."

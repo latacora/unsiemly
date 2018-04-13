@@ -15,12 +15,24 @@
 (s/def ::project-id string?)
 (defmethod internal/opts-spec :stackdriver [_] ::u/base-opts)
 
-;; Trust me, I'm a doctor :-)
-;; See:
-;; - https://github.com/latacora/unsiemly/issues/11
-;; - https://github.com/GoogleCloudPlatform/google-cloud-java/issues/2432
-
 (defmacro defproxytype
+  "Creates a type with given name that implements only the given interface. The
+  type will have one constructor, taking an object that implements the same
+  interface. Instances of this type will proxy the instance you give it,
+  exposing only the behavior of that interface.
+
+  This is useful when you have an object implementing multiple interfaces A,
+  B... and you need to interact with some code that does bogus type checking in
+  the wrong order (e.g. checking if it's a B first when you want it to act like
+  an A). So, create a proxy type for A, wrap your x in the proxy type, and now
+  you have x-except-only-looks-like-an-A.
+
+  This uses deftype internally so you'll also get a ->TypeName fn for free.
+
+  To see why this is necessary:
+  - https://github.com/latacora/unsiemly/issues/11
+  - https://github.com/GoogleCloudPlatform/google-cloud-java/issues/2432
+  "
   [type-name iface-sym]
   (let [iface (Class/forName (str iface-sym))
         {:keys [members]} (refl/reflect iface)

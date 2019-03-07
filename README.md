@@ -18,8 +18,8 @@ just look an awful lot like stream processors tools, you can probably use it
 for a bunch of other stuff.
 
 Currently supports [ElasticSearch][es] (with optional support for AWS' hosted
-Elasticsearch and its proprietary message signing) and [GCP's
-StackDriver][gcpsd]. Because we use `java.time`/JSR310, this project requires
+Elasticsearch and its proprietary message signing), [GCP's
+StackDriver][gcpsd] and BigQuery. Because we use `java.time`/JSR310, this project requires
 JDK 8.
 
 ## Usage

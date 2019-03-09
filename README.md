@@ -130,7 +130,7 @@ By default, common data types that can't be appropriately serialized are already
 handled. For example, SIEMs that consume JSON will have keywords transformed to
 strings, timestamps are converted to ISO8601, et cetera. As a rule, you can just
 give unsiemly the data structure you already have and it will probably do
-something sane with it.
+something reasonable with it.
 
 If you have additional parsing needs, check out `unsiemly.xforms`, which has
 utilities for less obvious transforms. This can be useful if you need a very

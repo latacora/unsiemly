@@ -19,14 +19,21 @@
 
                  ;; -> AWS ES
                  [vc.inreach.aws/aws-signing-request-interceptor "0.0.22"]
-                 [com.amazonaws/aws-java-sdk-core "1.11.475"
+                 [com.amazonaws/aws-java-sdk-core "1.11.515"
                   :exclusions [commons-logging]]
 
                  ;; -> StackDriver
-                 [com.google.cloud/google-cloud-logging "1.56.0"]
+                 [com.google.cloud/google-cloud-logging "1.64.0"]
 
                  ;; -> BigQuery
-                 [com.google.cloud/google-cloud-bigquery "1.56.0"]]
+                 [com.google.cloud/google-cloud-bigquery "1.64.0"]
+
+                 ;; Generic AWS APIs
+                 [com.cognitect.aws/api "0.8.273"]
+                 [com.cognitect.aws/endpoints "1.1.11.507"]
+
+                 ;; -> SNS
+                 [com.cognitect.aws/sns "697.2.391.0"]]
 
   :main ^:skip-aot unsiemly.core
   :target-path "target/%s"

@@ -115,15 +115,12 @@ To put stuff onto a stream:
 
 By default, streams won't keep your process running (most of the work is done in
 daemon threads), so if you have a short-lived process and you just want to put
-some stuff on the stream and then quit:
+some stuff on the stream and then quit, there's a convenience API that returns a
+manifold deferred:
 
 ```clojure
-(ms/put-all! siem msgs)
-(ms/close! siem)
-@(ms/on-drained siem)
+(u/process! opts msgs)
 ```
-
-For more details, see the manifold docs.
 
 ## Reformatting values
 

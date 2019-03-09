@@ -39,7 +39,7 @@ a stream and you just want it to point at a SIEM now, `u/siem!` is what you
 want. `u/siem-sink!` will build a new stream for you that you can put stuff
 into. Both take an opts map.
 
-### Options
+### Generic options
 
 The following options exist regardless of your specific SIEM type:
 
@@ -50,6 +50,8 @@ The following options exist regardless of your specific SIEM type:
      using; for example, on ElasticSearch this will set index names, but on
      StackDriver it will set the log name.
 
+### Reporting to stdout
+
 A simple builtin `:stdout` SIEM type exists that just prints each message. The
 following options exist (where `stdout` is an alias for the `unsiemly.stdout`
 namespace):
@@ -59,6 +61,8 @@ namespace):
      everything together on one line).
    * `::stdout/format` (keyword, optional): `:str` for newline-delimited Clojure
      pr strs (not EDN!), `:json` for newline-delimited JSON.
+
+### Reporting to ElasticSearch (including AWS hosted ElasticSearch)
 
 For ElasticSearch, the `::u/siem-type` value is `:elasticsearch`. The indices
 are automatically partitioned by day, formatted as `$yourlogname-yyyy-MM-dd`.
@@ -80,9 +84,13 @@ The following options exist (were `es` is an alias for the
      ElasticSearch service: the region is required to perform signatures
      correctly.
 
+### Reporting to StackDriver
+
 For GCP StackDriver, the `::u/siem-type` value is `:stackdriver` and no extra
 options exist. Credentials are automatically taken from the environment as per
 the GCP SDK.
+
+### Reporting to BigQuery
 
 For GCP BigQuery, the `::u/siem-type` value is `:bigquery` and the following
 extra options exist (where `:bq` is an alias for the `unsiemly.bigquery`

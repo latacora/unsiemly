@@ -93,7 +93,7 @@ the GCP SDK.
 ### Reporting to BigQuery
 
 For GCP BigQuery, the `::u/siem-type` value is `:bigquery` and the following
-extra options exist (where `:bq` is an alias for the `unsiemly.bigquery`
+extra options exist (where `:ub` is an alias for the `unsiemly.bigquery`
 namespace):
 
   * `::ub/project-id` is the string name of the project to send data to.

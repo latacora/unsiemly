@@ -46,7 +46,9 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]
                                   ;; ;; just for joda-time conversions:
-                                  [clj-time "0.15.1"]]}}
+                                  [clj-time "0.15.1"]]
+                   :plugins [[jonase/eastwood "0.3.5"]
+                             [lein-kibit "0.1.6"]]}}
 
   :deploy-repositories [["releases" :clojars]
                         ["snapshots" :clojars]])

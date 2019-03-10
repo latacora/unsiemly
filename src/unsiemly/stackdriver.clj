@@ -1,8 +1,7 @@
 (ns unsiemly.stackdriver
   (:require [clojure.spec.alpha :as s]
             [unsiemly.internal :as internal]
-            [unsiemly.xforms :as xf]
-            [com.rpl.specter :as sr])
+            [unsiemly.xforms :as xf])
   (:import (com.google.cloud.logging
              LogEntry Payload$JsonPayload
              Logging Logging$WriteOption

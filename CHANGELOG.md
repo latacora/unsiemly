@@ -15,6 +15,12 @@ Nothing yet.
 - Miscellaneous improvements to the documentation.
 - Miscellaneous improvements to CI.
 
+### Changed
+
+- Discovered root cause for the bizarre BigQuery bug mentioned in the last
+  release. Turns out to be unrelated to BigQuery itself, but rather a format
+  error. See a6ed2136e6b8f928a0aa44f11d8a59425a5a8443 for details.
+
 ## [0.9.0] -- 2018-04-13
 
 ### Changed

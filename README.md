@@ -19,8 +19,9 @@ for a bunch of other stuff.
 
 Currently supports [ElasticSearch][es] (with optional support for AWS' hosted
 Elasticsearch and its proprietary message signing), [GCP's
-StackDriver][gcpsd] and BigQuery. Because we use `java.time`/JSR310, this project requires
-JDK 8.
+StackDriver][gcpsd], [BigQuery][https://cloud.google.com/bigquery/] and
+[SNS][https://aws.amazon.com/sns/]. Because we use `java.time`/JSR310, this
+project requires JDK 8 or higher.
 
 ## Usage
 

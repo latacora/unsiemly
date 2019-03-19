@@ -118,7 +118,8 @@
         wrapped-obj '(.-obj this)]
     `(deftype ~type-name [~(with-meta 'obj {:tag iface})]
        ~iface-sym
-       ~@(for [{:keys [name parameter-types return-type]} members
+       ~@(for [{:keys [name parameter-types return-type flags]} members
+               :when (not (:static flags))
                :let [m (with-meta (symbol name) {:tag return-type})
                      args (map (fn [arg-idx arg-type]
                                  (with-meta

@@ -18,8 +18,8 @@ just look an awful lot like stream processors tools, you can probably use it
 for a bunch of other stuff.
 
 Currently supports [ElasticSearch][es] (with optional support for AWS' hosted
-Elasticsearch and its proprietary message signing) and [GCP's
-StackDriver][gcpsd]. Because we use `java.time`/JSR310, this project requires
+Elasticsearch and its proprietary message signing), [GCP's
+StackDriver][gcpsd] and BigQuery. Because we use `java.time`/JSR310, this project requires
 JDK 8.
 
 ## Usage
@@ -39,7 +39,7 @@ a stream and you just want it to point at a SIEM now, `u/siem!` is what you
 want. `u/siem-sink!` will build a new stream for you that you can put stuff
 into. Both take an opts map.
 
-### Options
+### Generic options
 
 The following options exist regardless of your specific SIEM type:
 
@@ -48,7 +48,11 @@ The following options exist regardless of your specific SIEM type:
    * `::u/log-name` (string, required): sets the log name for your specific
      SIEM. This has slightly different effects depending on which one you're
      using; for example, on ElasticSearch this will set index names, but on
-     StackDriver it will set the log name.
+     StackDriver it will set the log name. See below for details. This should
+     generally be a human readable string, though it may be subject to
+     SIEM-specific constraints: typically ASCII.
+
+### Reporting to stdout
 
 A simple builtin `:stdout` SIEM type exists that just prints each message. The
 following options exist (where `stdout` is an alias for the `unsiemly.stdout`
@@ -59,6 +63,8 @@ namespace):
      everything together on one line).
    * `::stdout/format` (keyword, optional): `:str` for newline-delimited Clojure
      pr strs (not EDN!), `:json` for newline-delimited JSON.
+
+### Reporting to ElasticSearch (including AWS hosted ElasticSearch)
 
 For ElasticSearch, the `::u/siem-type` value is `:elasticsearch`. The indices
 are automatically partitioned by day, formatted as `$yourlogname-yyyy-MM-dd`.
@@ -80,12 +86,16 @@ The following options exist (were `es` is an alias for the
      ElasticSearch service: the region is required to perform signatures
      correctly.
 
+### Reporting to StackDriver
+
 For GCP StackDriver, the `::u/siem-type` value is `:stackdriver` and no extra
 options exist. Credentials are automatically taken from the environment as per
 the GCP SDK.
 
+### Reporting to BigQuery
+
 For GCP BigQuery, the `::u/siem-type` value is `:bigquery` and the following
-extra options exist (where `:bq` is an alias for the `unsiemly.bigquery`
+extra options exist (where `:ub` is an alias for the `unsiemly.bigquery`
 namespace):
 
   * `::ub/project-id` is the string name of the project to send data to.
@@ -95,6 +105,16 @@ namespace):
 If the project id is unspecified, uses the default project. If the dataset id is
 unspecified, the `::u/log-name` is used. If the table id is unspecified,
 `unsiemly` is used.
+
+## Reporting to AWS SNS
+
+For AWS SNS, the `::u/siem-type` value is `:sns` and the following
+extra options exist (where `:us` is an alias for the `unsiemly.sns`
+namespace):
+
+* `::us/target-arn` (required), the ARN of the SNS target to send to.
+
+The log name will be sent as the SNS message subject.
 
 ### Manifold stream 101
 
@@ -107,15 +127,12 @@ To put stuff onto a stream:
 
 By default, streams won't keep your process running (most of the work is done in
 daemon threads), so if you have a short-lived process and you just want to put
-some stuff on the stream and then quit:
+some stuff on the stream and then quit, there's a convenience API that returns a
+manifold deferred:
 
 ```clojure
-(ms/put-all! siem msgs)
-(ms/close! siem)
-@(ms/on-drained siem)
+(u/process! opts msgs)
 ```
-
-For more details, see the manifold docs.
 
 ## Reformatting values
 
@@ -125,7 +142,7 @@ By default, common data types that can't be appropriately serialized are already
 handled. For example, SIEMs that consume JSON will have keywords transformed to
 strings, timestamps are converted to ISO8601, et cetera. As a rule, you can just
 give unsiemly the data structure you already have and it will probably do
-something sane with it.
+something reasonable with it.
 
 If you have additional parsing needs, check out `unsiemly.xforms`, which has
 utilities for less obvious transforms. This can be useful if you need a very

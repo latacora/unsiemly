@@ -1,11 +1,15 @@
 language: clojure
-dist: trusty
 jdk:
+  - openjdk8
   - oraclejdk8
+  - oraclejdk9
+  - oraclejdk11
 cache:
   directories:
     - $HOME/.lein
     - $HOME/.m2
 script:
   - lein version
+  - lein kibit || true
+  - lein eastwood || true
   - lein test

@@ -107,7 +107,7 @@ If the project id is unspecified, uses the default project. If the dataset id is
 unspecified, the `::u/log-name` is used. If the table id is unspecified,
 `unsiemly` is used.
 
-## Reporting to AWS SNS
+### Reporting to AWS SNS
 
 For AWS SNS, the `::u/siem-type` value is `:sns` and the following
 extra options exist (where `:us` is an alias for the `unsiemly.sns`
@@ -117,7 +117,7 @@ namespace):
 
 The log name will be sent as the SNS message subject.
 
-### Manifold stream 101
+## Manifold stream 101
 
 To put stuff onto a stream:
 

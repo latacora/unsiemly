@@ -19,14 +19,14 @@
 
                  ;; -> AWS ES
                  [vc.inreach.aws/aws-signing-request-interceptor "0.0.22"]
-                 [com.amazonaws/aws-java-sdk-core "1.11.515"
+                 [com.amazonaws/aws-java-sdk-core "1.11.521"
                   :exclusions [commons-logging]]
 
                  ;; -> StackDriver
-                 [com.google.cloud/google-cloud-logging "1.64.0"]
+                 [com.google.cloud/google-cloud-logging "1.65.0"]
 
                  ;; -> BigQuery
-                 [com.google.cloud/google-cloud-bigquery "1.64.0"]
+                 [com.google.cloud/google-cloud-bigquery "1.65.0"]
 
                  ;; Generic AWS APIs
                  [com.cognitect.aws/api "0.8.273"]

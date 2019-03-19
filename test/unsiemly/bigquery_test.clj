@@ -91,24 +91,4 @@
 (t/deftest bigquery-roundtrip-tests
   (t/testing "nested maps"
     (let [m {"a" {"a" {"c" 1}}}]
-      (t/is (= (roundtrip m) m))))
-
-  ;; Note: when you feed bigquery LazySeqs, you get mysterious failures. I
-  ;; haven't been able to demonstrate this by simply roundtripping through the
-  ;; row type, unlike with StackDriver, which has a similar bizarre bug. So for
-  ;; now you'll just have to take my word for it that vecs work and seqs/lists
-  ;; don't.
-
-  (t/testing "lists -> vecs"
-    (let [x {"a" '(1 2 3)}
-          y {"a" [1 2 3]}
-          roundtripped (roundtrip x)]
-      (t/is (= roundtripped y))
-      (t/is (vector? (.get roundtripped "a")))))
-
-  (t/testing "seqs -> vecs"
-    (let [x {"a" (range 20)}
-          y {"a" (vec (range 20))}
-          roundtripped (roundtrip x)]
-      (t/is (= roundtripped y))
-      (t/is (vector? (.get roundtripped "a"))))))
+      (t/is (= (roundtrip m))))))

@@ -6,6 +6,15 @@ All notable changes to this project will be documented in this file. This change
 
 Nothing yet.
 
+## [0.10.0] -- 2019-03-19
+
+### Added
+
+- Support for SNS.
+- Support for JDK8+ (see commit ddb0c28770b2b57651a01d23a1f2c49def438829).
+- Miscellaneous improvements to the documentation.
+- Miscellaneous improvements to CI.
+
 ## [0.9.0] -- 2018-04-13
 
 ### Changed
@@ -114,7 +123,8 @@ Initial release.
 - Basic StackDriver and Elasticsearch support
 - Basic data transforms, especially for timestamps
 
-[Unreleased]: https://github.com/latacora/unsiemly/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/latacora/unsiemly/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/latacora/unsiemly/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/latacora/unsiemly/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/latacora/unsiemly/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/latacora/unsiemly/compare/0.6.0...0.7.0

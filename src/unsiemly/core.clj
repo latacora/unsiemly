@@ -7,6 +7,7 @@
    [clojure.spec.alpha :as s]))
 
 ;; side-effecty requires:
+(require '[unsiemly.sns])
 (require '[unsiemly.stackdriver])
 (require '[unsiemly.bigquery])
 (require '[unsiemly.elasticsearch])

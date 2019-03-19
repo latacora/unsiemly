@@ -48,7 +48,9 @@ The following options exist regardless of your specific SIEM type:
    * `::u/log-name` (string, required): sets the log name for your specific
      SIEM. This has slightly different effects depending on which one you're
      using; for example, on ElasticSearch this will set index names, but on
-     StackDriver it will set the log name.
+     StackDriver it will set the log name. See below for details. This should
+     generally be a human readable string, though it may be subject to
+     SIEM-specific constraints: typically ASCII.
 
 ### Reporting to stdout
 

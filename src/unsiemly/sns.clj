@@ -13,7 +13,7 @@
   (let [sns (aws/client {:api :sns})]
     (fn sns-entries-callback [entries]
       (doseq [e entries
-              :let [message (json/generate-string {"default" e})]]
+              :let [message (json/generate-string {"default" (json/generate-string e)})]]
         (aws/invoke sns {:op :Publish
                          :request {:Message message
                                    :MessageStructure "json"

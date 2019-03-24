@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file. This change
 
 Nothing yet.
 
+## [0.11.0] -- 2019-03-21
+
+### Fixed
+
+- SNS did not correctly encode the nested JSON required by the API.
+
 ## [0.10.0] -- 2019-03-19
 
 ### Added
@@ -129,7 +135,8 @@ Initial release.
 - Basic StackDriver and Elasticsearch support
 - Basic data transforms, especially for timestamps
 
-[Unreleased]: https://github.com/latacora/unsiemly/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/latacora/unsiemly/compare/0.11.0...HEAD
+[0.11.0]: https://github.com/latacora/unsiemly/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/latacora/unsiemly/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/latacora/unsiemly/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/latacora/unsiemly/compare/0.7.0...0.8.0

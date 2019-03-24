@@ -28,16 +28,15 @@
         (t/is (= [[::invoke
                    ::client
                    {:op :Publish
-                    :request {:Message "{\"default\":{\"a\":1}}"
+                    :request {:Message "{\"default\":\"{\\\"a\\\":1}\"}"
                               :MessageStructure "json"
                               :Subject log
                               :TargetArn arn}}]
                   [::invoke
                    ::client
                    {:op :Publish
-                    :request {:Message "{\"default\":{\"a\":2}}"
+                    :request {:Message "{\"default\":\"{\\\"a\\\":2}\"}"
                               :MessageStructure "json"
                               :Subject log
                               :TargetArn arn}}]]
-                 @events))
-        ))))
+                 @events))))))
